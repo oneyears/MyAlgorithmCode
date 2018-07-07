@@ -1,0 +1,62 @@
+### 反转字符串
+- 蛮力移位
+1. 蛮力移位是每次存储第一个字符串元素，然后将后面的每一个元素
+2. 往前移动。就使得一个字符往前移动了。
+3. 当需要移动多次时就重复调用该方法
+4. 时间复杂度为o(mn) 空间复杂度为o(1)
+```
+		public static void LeftShiftOne_1(char [] cGroup) {
+			char re = cGroup [0];
+			int i = 1;
+			while (i < cGroup.Length) {
+				cGroup [i-1] = cGroup [i];
+				i++;
+			}
+			cGroup [i - 1] = re;
+		}
+
+		public static void LeftRotateString_1(char[] cGroup,int moveSetp) {
+			while (moveSetp-- != 0) {
+				LeftShiftOne_1 (cGroup);
+			}
+		} 
+	    	string str = "abcdef";
+			char[] s1Str = str.ToCharArray ();
+			LeftRotateString_1 (s1Str,3);
+			Console.WriteLine (s1Str);
+
+
+```
+
+***
+
+-. 三步反转
+1. 如同名字一样，通过3次反转从而使得整体反转
+2. 第一次从左边到中间的值反转
+3. 第二次从中间到右边的值反转
+4. 第三次从左到右反转的值反转
+5. 这样就直接使得a->x->b 变成 b->x->a 了移动了x步
+6. 时间复杂度为o(n)，空间复杂度为o(n)
+
+```
+		public static void ReverseString_2(char[] str,int _from,int _to) {
+			while (_from < _to) {
+				char temp = str [_from];
+				str [_from++] = str [_to];
+				str [_to--] = temp;
+			}
+		}
+		//超过步数就重新来一轮，可以用求余来走一轮
+		public static void LeftRotateString_2(char[] str ,int moveStep) {
+
+			moveStep %= str.Length;
+			ReverseString_2 (str, 0, moveStep - 1);
+			ReverseString_2 (str, moveStep, str.Length - 1);
+			ReverseString_2 (str, 0, str.Length-1);
+		}
+```
+
+
+
+
+
