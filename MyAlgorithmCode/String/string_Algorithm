@@ -1,0 +1,68 @@
+code by C#
+
+是否含子串
+
+三种方式：
+
+方法一蛮力轮询： 第一种算法是容易实现，但是时间复杂度为o(n*m) 从头开始遍历一遍字符串子串，从第一个开始，来从另外一个父字符串寻找是否有这个字符，如果有就继续遍历（i++），直到这个子串遍历完。就返回true
+方法二排序后轮询：方法二是将两个字符串先进行排序，然后将其都从0开始遍历，此时可以把父串小于子串的先过滤掉，然后可以发现有剩下的必定是=子串的，如果比子串大，就一定不是包含了。所以可以直接返回false。 时间复杂度为o(mlogm)+o(nlogn)+o(m+n)
+方法三素数相乘：通过素数相对应字母，然后除对应的素数，当发现有余数则为false。但是数字相乘会导致整形数溢出，所以实际并不可行
+    class MainClass{
+        public static void Main(){
+            string a = "ABCD";
+            string b = "BAD";
+        
+            if(StringContain3(a,b))
+            Console.WriteLine ("true");
+        }
+        public static bool StringContain(string a, string b){
+        
+            for (int i = 0; i < b.Length; i++) {
+                int j;
+                for (j = 0; j < a.Length && (a [j] != b [i]); j++)
+                    ;
+                if (j >= a.Length)
+                    return false;
+            } 
+            return true;
+        }
+
+        public static bool StringContain2(string a, string b) {
+            char[] aStr =  a.ToCharArray ();
+            char[] bstr = b.ToCharArray ();
+            Array.Sort (aStr);
+            Array.Sort (bstr);
+            for (int pa = 0, pb = 0; pb < b.Length;) {
+                while (pa < a.Length && (aStr [pa] < bstr[pb]))
+                    ++pa;
+            //注意这里需要先判断是索引下标否越界
+                if (pa >= a.Length || (aStr [pa] > bstr[pb]))
+                    return false;
+                ++pb;
+            }
+            return true;
+        }
+
+        public static bool StringContain3(string a,string b){
+            char[] aStr = a.ToCharArray ();
+            char[] bStr = b.ToCharArray (); 
+            int[] p = new int[26]{ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101 };
+            int f = 1;
+            Console.WriteLine (a.Length);
+            for (int i = 0; i < a.Length; i++) {
+                Console.WriteLine (i);
+                int x = p [ aStr[i] - 'A'];
+                if (f % x != 0) {
+                    f *= x;
+                }
+            }
+
+            for (int i = 0; i < b.Length; i++) {
+                int x = p [bStr[i] - 'A'];
+                if (f % x != 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
